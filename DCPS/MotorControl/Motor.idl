@@ -1,0 +1,31 @@
+module Actuators {
+
+#pragma DCPS_DATA_TYPE "Actuators::Motor"
+#pragma DCPS_DATA_KEY  "Actuators::Motor motor_key"
+   enum MotorDirection {
+      MOTOR_FORWARD, MOTOR_BACKWARD, MOTOR_END
+   };
+
+   struct Motor {
+      MotorDirection  motor_direction;
+      octet motor_speed;
+      long motor_key;
+      long motor_count;
+   };
+
+#pragma DCPS_DATA_TYPE "Actuators::Steering"
+#pragma DCPS_DATA_KEY  "Actuators::Steering steering_key"
+   enum SteeringOrientation {
+      STEERING_LEFT, STEERING_RIGHT, STEERING_END
+   };
+
+   struct Steering {
+      SteeringOrientation steering_orientation;
+      octet steering_angle;
+      long steering_key;
+      long steering_count; 
+   };
+
+};
+   
+	
