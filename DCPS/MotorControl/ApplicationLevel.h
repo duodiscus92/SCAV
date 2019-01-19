@@ -1,10 +1,10 @@
 // Source from DistributedContent example adapted by J. Ehrlich
 #ifndef APPLICATIONLEVEL_H_
 #define APPLICATIONLEVEL_H_
-#define ANGLE_SCALE_PARAM 1
-#define ANGLE_SHIFT_PARAM 0
-#define SPEED_SCALE_PARAM 1
-#define SPEED_SHIFT_PARAM 0
+#define ANGLE_SCALE_PARAM 0.3333333333
+#define ANGLE_SHIFT_PARAM -50
+#define SPEED_SCALE_PARAM 0.1111111111
+#define SPEED_SHIFT_PARAM -16.66666666
 
 #include "MotorC.h"
 

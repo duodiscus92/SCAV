@@ -16,6 +16,8 @@ AbstractionLayer::AbstractionLayer()
 : steering_handle_(0)
 , motor_handle_(0)
 , application_(0)
+, ignore_motor(false)
+, ignore_steering(false)
 {
 }
 
@@ -180,7 +182,10 @@ if(current_mode ==  IS_PUBLISHER){
 /************************ SUBSCRIBER SECTION ******************************/
 /*************************************************************************/
 else if(current_mode == IS_SUBSCRIBER) {
-  cout << "AbstractionLayer ===> I am a subscriber, nice to meet you." << endl;
+  cout << "AbstractionLayer ===> I am a" 
+       << (ignore_motor ? " non-motor but" : " motor" )
+       << (ignore_steering ? " but non-steering" : "steering") 
+       << " subscriber, nice to meet you." << endl;
   // Create the subscriber
   sub_ = dp_->create_subscriber(SUBSCRIBER_QOS_DEFAULT,
                                 //DDS::SubscriberListener::_nil(),
@@ -192,36 +197,52 @@ else if(current_mode == IS_SUBSCRIBER) {
     return false;
   }
 
-  // Create the listener for datareader
-  steering_listener_ = new SteeringDataReaderListenerImpl(this);
-  motor_listener_ = new MotorDataReaderListenerImpl(this);
 
-  // Create the datareader for motor
-  motor_dr_ = sub_->create_datareader (motor_topic_.in (),
+  // create motor listener and data reader only if this topic is subsrcibed
+  if(ignore_motor == false) {
+    // Create the listener for motor datareader
+    motor_listener_ = new MotorDataReaderListenerImpl(this);
+
+    // Create the datareader for motor
+    motor_dr_ = sub_->create_datareader (motor_topic_.in (),
                                  DATAREADER_QOS_DEFAULT,
                                  motor_listener_.in (),
                                  ::OpenDDS::DCPS::DEFAULT_STATUS_MASK);
-  if (CORBA::is_nil (motor_dr_.in ()) ) {
-    ACE_ERROR((LM_ERROR, "ERROR - Create motor data reader failed.\n"));
-    return false;
+    if (CORBA::is_nil (motor_dr_.in ()) ) {
+      ACE_ERROR((LM_ERROR, "ERROR - Create motor data reader failed.\n"));
+      return false;
+    }
   }
 
-  // Create the datareader for steering
-  steering_dr_ = sub_->create_datareader (steering_topic_.in (),
+  // create steering listener and data reader only if this topic is subsrcibed
+  if(ignore_steering == false) {
+    // Create the listener for steering datareader
+    steering_listener_ = new SteeringDataReaderListenerImpl(this);
+
+    // Create the datareader for steering
+    steering_dr_ = sub_->create_datareader (steering_topic_.in (),
                                  DATAREADER_QOS_DEFAULT,
                                  steering_listener_.in (),
                                  ::OpenDDS::DCPS::DEFAULT_STATUS_MASK);
-  if (CORBA::is_nil (steering_dr_.in ()) ) {
-    ACE_ERROR((LM_ERROR, "ERROR - Create steering data reader failed.\n"));
-    return false;
+    if (CORBA::is_nil (steering_dr_.in ()) ) {
+      ACE_ERROR((LM_ERROR, "ERROR - Create steering data reader failed.\n"));
+      return false;
+    }
   }
-
 }
 else{
   cout << "Abstraction Layer ==> Error : mode (publisher or subscriber) was not specified" << endl;
   return false;
 }
   return true;
+}
+
+// called byt ApplicationLayer
+void
+AbstractionLayer::set_ignoremode(bool ignore_motor, bool ignore_steering)
+{
+  AbstractionLayer::ignore_motor = ignore_motor;
+  AbstractionLayer::ignore_steering = ignore_steering;
 }
 
 // called by the steering listener

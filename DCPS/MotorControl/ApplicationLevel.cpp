@@ -1,6 +1,7 @@
 #include "ApplicationLevel.h"
-
 #include "AbstractionLayer.h"
+
+#include "../Config/Config_Scav.h"
 
 #include "ace/streams.h"
 #include "ace/OS_NS_stdlib.h"
@@ -21,6 +22,11 @@ ApplicationLevel::ApplicationLevel(AbstractionLayer*  abstract,
     abstraction_layer_->attach_application(this);
   }
   steering_inprogress = motor_inprogress = true;
+
+  //read the configuration file
+  Config_Scav myconfig;
+  myconfig.ImportConfigFile(ACE_TEXT("Config_MotorControl.ini"));
+
   cout << "ApplicationLevel launched by a publisher or a subscriber" << endl;
 }
 
@@ -40,7 +46,8 @@ void ApplicationLevel::receive_steering(const Actuators::Steering& steering)
      return;
    }
 
-   cout << "ApplicationLevel ===> Steering angle : " << ((int)steering.steering_angle  * ANGLE_SCALE_PARAM + ANGLE_SHIFT_PARAM)
+   //cout << "ApplicationLevel ===> Steering angle : " << ((int)steering.steering_angle  * ANGLE_SCALE_PARAM + ANGLE_SHIFT_PARAM)
+   cout << "ApplicationLevel ===> Steering angle : " << (int)steering.steering_angle
 	//<< " Steering orientation : " << steering.steering_orientation
 	<< " Steering count : " << steering.steering_count
 	<< endl;
@@ -72,7 +79,8 @@ void ApplicationLevel::receive_motor(const Actuators::Motor& motor)
      return;
    }
 
-   cout << "ApplicationLevel ===> Motor speed : " << ((int)motor.motor_speed * SPEED_SCALE_PARAM + SPEED_SHIFT_PARAM)
+   //cout << "ApplicationLevel ===> Motor speed : " << ((int)motor.motor_speed * SPEED_SCALE_PARAM + SPEED_SHIFT_PARAM)
+   cout << "ApplicationLevel ===> Motor speed : " << (int)motor.motor_speed
 	//<< " Motor direction : " << motor.motor_direction
 	<< " Motor count : " << motor.motor_count
 	<< endl;

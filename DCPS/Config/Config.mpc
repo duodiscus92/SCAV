@@ -1,0 +1,15 @@
+//  -*- MPC -*-
+
+project(*config) : acelib {
+  exename = configscav
+  Source_Files {
+    Config_Scav.cpp
+  }
+  Header_Files {
+    Config_Scav.h
+  }
+  Documentation_Files {
+    Config_Test.ini
+  }
+}
+

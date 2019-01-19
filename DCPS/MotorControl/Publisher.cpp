@@ -78,10 +78,10 @@ int ACE_TMAIN (int argc, ACE_TCHAR *argv[])
       //ACE_OS::sleep(20);
 
       // Loop sleeping and sending new speed and steering angle
-      for (int cnt = 1; cnt <= 10; cnt++) {
+      for (int cnt = -10; cnt <= 10; cnt++) {
 	int speed, heading;
-        heading = 10+cnt;
-	speed = 100+cnt;
+        heading = cnt;
+	speed = cnt*0.5;
 	// publsih speed and steering angle
 	app_level.send_vehicle_heading(heading);
       	app_level.send_vehicle_speed(speed); 

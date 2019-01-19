@@ -48,6 +48,14 @@ public:
    *         false otherwise.
    */
   bool init_DDS(int& argc, ACE_TCHAR *argv[], enum mode current_mode);
+
+  /*
+   * Set the ignore mode (motor or steering)
+   *
+   *  @param motor steering
+   */
+  void set_ignoremode(bool ignore_motor, bool ignore_steering);
+
   /**
    * Shutdown the DDS System
    */
@@ -136,6 +144,9 @@ private:
 
   /// The reference to the Application Level code
   ApplicationLevel* application_;
+
+  /// The ignore mode flags;
+  bool ignore_motor, ignore_steering;
 };
 
 #endif

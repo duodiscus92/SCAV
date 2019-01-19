@@ -22,6 +22,7 @@ project(*publisher) : dcpsexe, dcps_tcp {
   }
 
   Source_Files {
+    ../Config/Config_Scav.cpp
     AbstractionLayer.cpp
     ApplicationLevel.cpp
     SteeringDataReaderListenerImpl.cpp
@@ -40,6 +41,7 @@ project(*subscriber) : dcpsexe, dcps_tcp {
   }
 
   Source_Files {
+    ../Config/Config_Scav.cpp
     AbstractionLayer.cpp
     ApplicationLevel.cpp
     SteeringDataReaderListenerImpl.cpp

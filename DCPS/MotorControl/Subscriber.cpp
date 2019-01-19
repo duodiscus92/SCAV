@@ -71,6 +71,9 @@ int ACE_TMAIN (int argc, ACE_TCHAR *argv[])
                 0);
     }
 
+    // inform abstraction layer o=on the ignore mode
+    abs_layer.set_ignoremode(ignore_motor, ignore_steering);
+
     // check that the node name is set
     if (0 == ACE_OS::strcmp(node_name.c_str(), ACE_TEXT(""))) {
       ACE_TCHAR local_hostname[1024];

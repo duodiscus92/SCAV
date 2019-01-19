@@ -29,8 +29,8 @@
 // TAO_IDL - Generated from
 // be/be_codegen.cpp:652
 
-#ifndef _TAO_IDL_MOTORTYPESUPPORTS_TFGXZH_CPP_
-#define _TAO_IDL_MOTORTYPESUPPORTS_TFGXZH_CPP_
+#ifndef _TAO_IDL_MOTORTYPESUPPORTS_B7GSJS_CPP_
+#define _TAO_IDL_MOTORTYPESUPPORTS_B7GSJS_CPP_
 
 
 #include "MotorTypeSupportS.h"
