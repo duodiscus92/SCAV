@@ -1,4 +1,5 @@
 /* adapted from OpenDDS by J. Ehrlich */
+#include <string>
 #include "ace/Get_Opt.h"
 #include "ace/OS_NS_unistd.h"
 #include "ace/OS_NS_stdlib.h"
@@ -8,23 +9,29 @@
 
 #include "AbstractionLayer.h"
 #include "ApplicationLevel.h"
-
-#include <string>
+#include "../RpiCtrl/RpiCtrl.h"
 
 #define MAX_SPEED 10
 #define MIN_SPEED -5
 #define MAX_ANGLE +10
 #define MIN_ANGLE -10
 
+// Create a Rpi controller object
+RpiCtrl myRpi;
+
 int ACE_TMAIN (int argc, ACE_TCHAR *argv[])
 {
   /// return status of main
   int status = 0;
+  // Initilize WiringPi and  PWM
+  //RpiCtrl myRpi;
+  //myRpi.rpi_init();
+  //myRpi.rpi_pwm_init();
 
   // Initialize DDS before parsing the command line parameters.
   // This is done so the DDS command line parameters do not go through the
   // application's parameter processing.
-  AbstractionLayer abs_layer;
+  AbstractionLayer abs_layer(false,false);
 
   if ( abs_layer.init_DDS(argc, argv, IS_SUBSCRIBER) ) {
 
@@ -72,7 +79,7 @@ int ACE_TMAIN (int argc, ACE_TCHAR *argv[])
     }
 
     // inform abstraction layer o=on the ignore mode
-    abs_layer.set_ignoremode(ignore_motor, ignore_steering);
+    //abs_layer.set_ignoremode(ignore_motor, ignore_steering);
 
     // check that the node name is set
     if (0 == ACE_OS::strcmp(node_name.c_str(), ACE_TEXT(""))) {
@@ -90,8 +97,12 @@ int ACE_TMAIN (int argc, ACE_TCHAR *argv[])
     // Only proceed if there have been no errors
     if (status == 0) {
 
+      // Initilize WiringPi and   PWM
+      myRpi.rpi_init(); // works only if Subscriber (and consquently Publisher) are excuted as root
+      myRpi.rpi_pwm_init();
+
       // Create the application level (which connects itself to the abstraction layer)
-      ApplicationLevel app_level(&abs_layer, node_name, ignore_steering, ignore_motor);
+      ApplicationLevel app_level(&abs_layer, node_name, ignore_steering, ignore_motor, &myRpi);
       cout << "Subscriber ==> Launching Application Level" << endl;
 
       // wait for publication until the pubisher has finished

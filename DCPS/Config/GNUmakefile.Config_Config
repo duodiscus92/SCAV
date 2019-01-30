@@ -110,6 +110,7 @@ else
 LDFLAGS      += -L. $(if $(ARCH),-L./$(ARCH)) -L$(ACE_ROOT)/lib $(if $(ARCH),-L$(ACE_ROOT)/lib/$(ARCH))
 endif
 CPPFLAGS     += -I$(ACE_ROOT)
+CPPFLAGS     += -DTEST_CONFIG_SCAV, -DACE_NLOGGING
 ifeq ($(static_libs),1)
   CPPFLAGS += -DACE_AS_STATIC_LIBS
   ifeq ($(link_groups), 1)

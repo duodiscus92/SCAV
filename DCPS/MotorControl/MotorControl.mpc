@@ -22,7 +22,9 @@ project(*publisher) : dcpsexe, dcps_tcp {
   }
 
   Source_Files {
+    ../RpiCtrl/RpiCtrl.cpp
     ../Config/Config_Scav.cpp
+    ../ScenarioReader/ScenarioReader.cpp
     AbstractionLayer.cpp
     ApplicationLevel.cpp
     SteeringDataReaderListenerImpl.cpp
@@ -41,6 +43,7 @@ project(*subscriber) : dcpsexe, dcps_tcp {
   }
 
   Source_Files {
+    ../RpiCtrl/RpiCtrl.cpp
     ../Config/Config_Scav.cpp
     AbstractionLayer.cpp
     ApplicationLevel.cpp

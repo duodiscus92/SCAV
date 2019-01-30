@@ -35,7 +35,8 @@ const int DOMAINID = 111;
 class AbstractionLayer
 {
 public:
-  AbstractionLayer();
+  AbstractionLayer( const bool ignore_steering,
+                    const bool ignore_motor);
   virtual ~AbstractionLayer();
 
   /**
@@ -146,7 +147,7 @@ private:
   ApplicationLevel* application_;
 
   /// The ignore mode flags;
-  bool ignore_motor, ignore_steering;
+  bool ignore_motor_, ignore_steering_;
 };
 
 #endif

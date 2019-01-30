@@ -1,4 +1,5 @@
 /* adapted from OpenDDS by J. Ehrlich */
+#include <string>
 #include "ace/Get_Opt.h"
 #include "ace/OS_NS_unistd.h"
 #include "ace/OS_NS_stdlib.h"
@@ -9,7 +10,8 @@
 #include "AbstractionLayer.h"
 #include "ApplicationLevel.h"
 
-#include <string>
+#include "../Config/Config_Scav.h"
+#include "../ScenarioReader/ScenarioReader.h"
 
 #define MAX_SPEED 10
 #define MIN_SPEED -5
@@ -24,7 +26,7 @@ int ACE_TMAIN (int argc, ACE_TCHAR *argv[])
   // Initialize DDS before parsing the command line parameters.
   // This is done so the DDS command line parameters do not go through the
   // application's parameter processing.
-  AbstractionLayer abs_layer;
+  AbstractionLayer abs_layer(false, false);
 
   if ( abs_layer.init_DDS(argc, argv, IS_PUBLISHER) ) {
 
@@ -67,16 +69,34 @@ int ACE_TMAIN (int argc, ACE_TCHAR *argv[])
     if (status == 0) {
 
       // Create the application level (which connects itself to the abstraction layer)
-      ApplicationLevel app_level(&abs_layer, node_name, false, false);
+      ApplicationLevel app_level(&abs_layer, node_name, false, false, NULL);
+      cout << "Publisher ==> Launching Application Level" << endl;
 
       // Publish initial speed (in dm/h, range 0 to +140 or -10) and steering heading (in degrees, range -30 to +30)
       // Note : speed and heading  are two temporarily variable for test prurpose only
       app_level.send_vehicle_heading(0);
       app_level.send_vehicle_speed(0); 
 
-      // Wait up to 20 seconds to be sure that published data was received by subsrcibers
-      //ACE_OS::sleep(20);
+      // Read a scenario in a config file
+      char ScenarioString[200];
+      Config_Scav myconfig;
+      myconfig.ImportConfigFile(ACE_TEXT("Config_MotorControl.ini"));
+      myconfig.GetStringFromConfigFile(ACE_TEXT("scenarios"), ACE_TEXT("huit"), ScenarioString);
 
+      //Publish the scenario
+      int duration, cnt=1; float heading, speed;
+      ScenarioReader myreader;
+      myreader.ScenarioParse(ScenarioString);
+      while(!myreader.ScenarioGetItem(&duration, &heading, &speed) ) {
+	// publsih speed and steering angle
+	app_level.send_vehicle_heading((int)heading);
+      	app_level.send_vehicle_speed((int)speed); 
+	cout << "Publishing Sample : " << cnt++ << " speed (dm/h) : " << (int)speed << " steering heading (°) : " << (int)heading << endl;
+	// wait a duration
+        ACE_OS::sleep(duration);
+      }
+ 
+     /*
       // Loop sleeping and sending new speed and steering angle
       for (int cnt = -10; cnt <= 10; cnt++) {
 	int speed, heading;
@@ -89,6 +109,7 @@ int ACE_TMAIN (int argc, ACE_TCHAR *argv[])
 	// wait a while
         ACE_OS::sleep(1);
       }
+      */
 
       // inform the subscriber that publication has finished
       app_level.motor_publisher_finished();

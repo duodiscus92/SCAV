@@ -242,6 +242,7 @@ int Config_Scav::GetDoubleFromConfigFile(const ACE_TCHAR *section, const ACE_TCH
    return status;
 }
 
+//#define TEST_CONFIG_SCAV
 #ifdef TEST_CONFIG_SCAV
 int main(/*int argc, char *argv[]*/)
 {
@@ -264,21 +265,21 @@ int main(/*int argc, char *argv[]*/)
 
    // get the intzger value of a given key in a givzen section
    if(!(status = myconfig.GetIntFromConfigFile(ACE_TEXT("logger"), ACE_TEXT("SeekIndex"), &IntValue)) )
-     cout << "Value is: " << IntValue << endl;
+     cout << "Integer value is: " << IntValue << endl;
    else
-     cout << "Value not found. Error: " << status << endl;
+     cout << "Integer value not found. Error: " << status << endl;
 
    // get the string value of a given key in a given section
    if(!(status = myconfig.GetStringFromConfigFile(ACE_TEXT("logger"), ACE_TEXT("SeekIndex"), StringValue)) )
-     cout << "String is: " << StringValue << endl;
+     cout << "String value is: " << StringValue << endl;
    else
-     cout << "String  not found. Error: " << status << endl;
+     cout << "String value not found. Error: " << status << endl;
 
    // get the double value of a given key in a given section
    if(!(status = myconfig.GetDoubleFromConfigFile(ACE_TEXT("logger"), ACE_TEXT("SeekIndex"), &DoubleValue)) )
-     cout << "Vaule is: " << DoubleValue << endl;
+     cout << "Double value is: " << DoubleValue << endl;
    else
-     cout << "Value not found. Error: " << status << endl;
+     cout << "Double value not found. Error: " << status << endl;
 
 
   return 0;

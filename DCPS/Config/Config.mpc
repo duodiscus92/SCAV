@@ -2,12 +2,16 @@
 
 project(*config) : acelib {
   exename = configscav
+  macros = TEST_CONFIG_SCAV, ACE_NLOGGING
+  
   Source_Files {
     Config_Scav.cpp
   }
+  
   Header_Files {
     Config_Scav.h
   }
+  
   Documentation_Files {
     Config_Test.ini
   }

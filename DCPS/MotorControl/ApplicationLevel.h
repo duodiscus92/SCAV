@@ -7,8 +7,9 @@
 #define SPEED_SHIFT_PARAM -16.66666666
 
 #include "MotorC.h"
-
 #include <ace/String_Base.h>
+
+#include "../RpiCtrl/RpiCtrl.h"
 
 /// Forward Declarations
 class AbstractionLayer;
@@ -33,7 +34,12 @@ public:
   ApplicationLevel(AbstractionLayer*  abstract,
                    const ACE_TString& nodename,
 		   const bool ignore_steering, 
-		   const bool ignore_motor);
+		   const bool ignore_motor,
+		   RpiCtrl* myRpi/*,
+		   const double steering_scale,
+		   const double steering_shift,
+		   const double motor_scale,
+		   const double motor_shift*/);
 
   virtual ~ApplicationLevel();
 
@@ -115,6 +121,10 @@ private:
   bool steering_inprogress, motor_inprogress;
   // Ignore flags
   bool ignore_motor_, ignore_steering_;
+  // Scaling coefficcient
+  double steering_scale_, steering_shift_, motor_scale_, motor_shift_;
+  // Rpi Controller
+  RpiCtrl* myrpi_;
 
 };
 
