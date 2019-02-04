@@ -135,7 +135,7 @@ void ApplicationLevel::receive_motor(const Actuators::Motor& motor)
 	<< " Motor count : " << motor.motor_count
 	<< endl;
 #ifdef RASPBERRY_PI
-   myrpi_->rpi_pwm_set((int))motor.motor_speed);
+   myrpi_->rpi_pwm_set((int)motor.motor_speed);
 #endif
 }
 
