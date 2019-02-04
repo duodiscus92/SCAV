@@ -14,8 +14,13 @@ project(*publisher) : dcpsexe, dcps_tcp {
   requires += no_opendds_safety_profile
   exename   = publisher
   after    += *idl
-//  staticflags = IS_PUBLISHER
-//  macros = IS_PUBLISHER
+  macros = RASPBERRY_PI
+  includes += ../RpiCtrl
+  includes += ../Config
+  includes += ../ScenarioReader
+  includes += ../wiringPi/includes
+  libs += wiringPi
+
 
   TypeSupport_Files {
     Motor.idl
@@ -37,6 +42,12 @@ project(*subscriber) : dcpsexe, dcps_tcp {
   requires += no_opendds_safety_profile
   exename   = subscriber
   after    += *publisher
+  macros = RASPBERRY_PI
+  includes += ../RpiCtrl
+  includes += ../Config
+  includes += ../ScenarioReader
+  includes += ../wiringPi/includes
+  libs += wiringPi
 
   TypeSupport_Files {
     Motor.idl
