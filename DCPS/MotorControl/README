@@ -1,0 +1,74 @@
+// *******************************************************************
+//
+// Insprired from Object Computing Inc. example
+// (c) Copyright 2006, Object Computing, Inc.
+// All Rights Reserved.
+//
+// *******************************************************************
+
+Instructions for Building MotorContyrol (assuming ACE, TAO, DDS, and MPC
+are installed and configured):
+
+1) Run Make Project Creator to generate build files:
+
+Unix, GNU Make:    $ACE_ROOT/bin/mwc.pl -type gnuace MotorConstrol.mwc
+
+2)  Build the application (on Raspberry Pi)
+
+Unix, Linux, Raspbian : make
+
+3)  Distribute using rcp the required files below on the other Raspberry Pi:
+- publisher
+- subscriber
+- Config_MotorControl.ini
+- dds_tcp_conf.ini
+- dds_udp_conf.ini
+
+
+Instructions for running the example:
+
+For TCP pub/sub:
+
+1)  Run the DCPSInfo server
+
+       $DDS_ROOT/dds/InfoRepo/DCPSInfoRepo -ORBEndpoint iiop://localhost:12345 -d domain_ids
+
+2)  Run the Subscriber as motor constroller
+
+       ./subscriber -DCPSConfigFile dds_tcp_conf.ini -m 
+
+4)  Run the Subscriber as steering wheel controller
+
+       ./subscriber -DCPSConfigFile dds_tcp_conf.ini -s 
+
+
+4)  Run the Publisher
+
+       ./publisher -DCPSConfigFile dds_tcp_conf.ini
+
+
+For UDP pub/sub:
+
+1)  Run the DCPSInfo server
+
+       $DDS_ROOT/dds/InfoRepo/DCPSInfoRepo -ORBEndpoint iiop://localhost:12345 -d domain_ids
+
+2)  Run the Subscriber as motor constroller
+
+       ./subscriber -DCPSConfigFile dds_udp_conf.ini -m
+
+3)  Run the Subscriber as  steering wheel controller
+
+       ./subscriber -DCPSConfigFile dds_udp_conf.ini -s
+
+
+4)  Run the Publisher
+
+       ./publisher -DCPSConfigFile dds_udp_conf.ini
+
+
+
+-Don Busch for the otiginal version
+ busch_d@ociweb.com
+-Adapted by J. Ehrlich for Motorcontrol
+ jacques.ehrlich@ifsttar.fr
