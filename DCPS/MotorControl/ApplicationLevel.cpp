@@ -82,6 +82,8 @@ Actuators::Steering received_steering_;
 // call by the Abstraction Layer
 void ApplicationLevel::receive_steering(const Actuators::Steering& steering)
 {
+   int steering_angle;
+
    //received_steering_ = steering;
    if(steering.steering_orientation == Actuators::STEERING_END){
      steering_inprogress =  false;
@@ -89,15 +91,15 @@ void ApplicationLevel::receive_steering(const Actuators::Steering& steering)
      return;
    }
 
-   //cout << "ApplicationLevel ===> Steering angle : " << ((int)steering.steering_angle  * ANGLE_SCALE_PARAM + ANGLE_SHIFT_PARAM)
    if (ignore_steering_)
      return;
-   cout << "ApplicationLevel ===> Steering angle : " << (int)steering.steering_angle
-	//<< " Steering orientation : " << steering.steering_orientation
+   //cout << "ApplicationLevel ===> Steering angle : " << (int)steering.steering_angle
+   steering_angle = ((int)steering.steering_angle  * steering_scale_+ steering_shift_);
+   cout << "ApplicationLevel ===> Steering angle : " << steering_angle
 	<< " Steering count : " << steering.steering_count
 	<< endl;
 #ifdef RASPBERRY_PI
-   myrpi_->rpi_pwm_set((int)steering.steering_angle);
+   myrpi_->rpi_pwm_set(steering_angle);
 #endif
 }
 
@@ -111,7 +113,8 @@ void ApplicationLevel::receive_vehicle_heading (int& vehicle_heading)
 Actuators::Steering steering_ = {Actuators::STEERING_LEFT,0,99,0};
 void ApplicationLevel::send_vehicle_heading (const int& vehicle_heading)
 {
-   steering_.steering_angle = (vehicle_heading - steering_shift_)/steering_scale_;
+   //steering_.steering_angle = vehicle_heading - steering_shift_)/steering_scale_;
+   steering_.steering_angle = vehicle_heading;
    abstraction_layer_->send_steering(steering_);
    steering_.steering_count++;
 }
@@ -120,6 +123,8 @@ Actuators::Motor received_motor_;
 // call by the Abstraction Layer
 void ApplicationLevel::receive_motor(const Actuators::Motor& motor)
 {
+   int motor_speed;
+
    //received_motor_ = motor;
    if(motor.motor_direction == Actuators::MOTOR_END){
      motor_inprogress =  false;
@@ -127,15 +132,15 @@ void ApplicationLevel::receive_motor(const Actuators::Motor& motor)
      return;
    }
 
-   //cout << "ApplicationLevel ===> Motor speed : " << ((int)motor.motor_speed * SPEED_SCALE_PARAM + SPEED_SHIFT_PARAM)
    if (ignore_motor_)
       return;
-   cout << "ApplicationLevel ===> Motor speed : " << (int)motor.motor_speed
-	//<< " Motor direction : " << motor.motor_direction
+   //cout << "ApplicationLevel ===> Motor speed : " << (int)motor.motor_speed
+   motor_speed = ((int)motor.motor_speed * motor_scale_ + motor_shift_);
+   cout << "ApplicationLevel ===> Motor speed : " << motor_speed
 	<< " Motor count : " << motor.motor_count
 	<< endl;
 #ifdef RASPBERRY_PI
-   myrpi_->rpi_pwm_set((int)motor.motor_speed);
+   myrpi_->rpi_pwm_set(motor_speed);
 #endif
 }
 
@@ -149,7 +154,8 @@ void ApplicationLevel::receive_vehicle_speed (int& vehicle_speed)
 Actuators::Motor motor_ = {Actuators::MOTOR_FORWARD,0,98,0};
 void ApplicationLevel::send_vehicle_speed (const int& vehicle_speed)
 {
-   motor_.motor_speed = (vehicle_speed - motor_shift_)/motor_scale_;
+   //motor_.motor_speed = (vehicle_speed - motor_shift_)/motor_scale_;
+   motor_.motor_speed = vehicle_speed;
    abstraction_layer_->send_motor(motor_);
    motor_.motor_count++;
 }

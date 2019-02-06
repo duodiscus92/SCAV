@@ -78,15 +78,17 @@ int ACE_TMAIN (int argc, ACE_TCHAR *argv[])
       app_level.send_vehicle_speed(0); 
 
       // Read a scenario in a config file
-      char ScenarioString[200];
+      char Scenario[200]; int Iteration;
       Config_Scav myconfig;
       myconfig.ImportConfigFile(ACE_TEXT("Config_MotorControl.ini"));
-      myconfig.GetStringFromConfigFile(ACE_TEXT("scenarios"), ACE_TEXT("huit"), ScenarioString);
+      myconfig.GetStringFromConfigFile(ACE_TEXT("scenarios"), ACE_TEXT("huit"), Scenario);
+      myconfig.GetIntFromConfigFile(ACE_TEXT("iteration"), ACE_TEXT("number"), &Iteration);
 
       //Publish the scenario
-      int duration, cnt=1; float heading, speed;
       ScenarioReader myreader;
-      myreader.ScenarioParse(ScenarioString);
+      int duration, cnt=1; float heading, speed;
+      for(int i = 0; i < Iteration; i++){
+      myreader.ScenarioParse(Scenario);
       while(!myreader.ScenarioGetItem(&duration, &heading, &speed) ) {
 	// publsih speed and steering angle
 	app_level.send_vehicle_heading((int)heading);
@@ -94,6 +96,7 @@ int ACE_TMAIN (int argc, ACE_TCHAR *argv[])
 	cout << "Publishing Sample : " << cnt++ << " speed (dm/h) : " << (int)speed << " steering heading (°) : " << (int)heading << endl;
 	// wait a duration
         ACE_OS::sleep(duration);
+      }
       }
  
      /*

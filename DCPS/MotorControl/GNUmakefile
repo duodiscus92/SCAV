@@ -8,7 +8,7 @@
 # this file will be lost the next time it is generated.
 #
 # MPC Command:
-# /home/scav/OpenDDS-3.13/ACE_wrappers/bin/mwc.pl -type gnuace MotorControl.mwc
+# /home/pi/OpenDDS-3.13-compiled-on-Rpi/ACE_wrappers/bin/mwc.pl -type gnuace MotorControl.mwc
 #
 #----------------------------------------------------------------------------
 
