@@ -94,10 +94,11 @@ int ACE_TMAIN (int argc, ACE_TCHAR *argv[])
 	// publsih speed and steering angle
 	app_level.send_vehicle_heading((int)heading);
       	app_level.send_vehicle_speed((int)speed); 
-	cout << "Publishing Sample : " << cnt++ << " speed (dm/h) : " << (int)speed << " steering heading (°) : " << (int)heading << endl;
+	cout << "Publishing Sample : " << cnt++ << " speed (dm/h) : " << (int)speed << " steering heading (°) : " << (int)heading << " duration (s) : " << duration << endl;
 	// wait a duration
         pentduration = duration; //take the integer part of duration
 	pdecduration = (duration - pentduration) * 1000000L; // take the decimal part of duration and convert in microsec
+        //cout << "Publisher debug  ===> pentduration : " << pentduration << " pdecduration : " << pdecduration << endl; 
         ACE_OS::sleep(pentduration);  //sleep X seconds
         usleep(pdecduration); //sleep Y mucroseconds
       }

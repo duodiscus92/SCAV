@@ -11,7 +11,7 @@ int ScenarioReader::ScenarioParse(char *ps)
    int status;
    if(items_found >= MAX_SCENARIO_ITEMS)
       return  ERROR_MAX_ITEM;
-   while((status = sscanf(ps, ":%d,%f,%f",
+   while((status = sscanf(ps, ":%f,%f,%f",
 	 &tdata[items_found].duration,
 	 &tdata[items_found].steering,
 	 &tdata[items_found].motor)) != EOF) {
