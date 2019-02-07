@@ -22,8 +22,10 @@ ApplicationLevel::ApplicationLevel(AbstractionLayer*  abstract,
 , myrpi_(myRpi)
 , steering_scale_(ANGLE_SCALE_PARAM)
 , steering_shift_(ANGLE_SHIFT_PARAM)
+, steering_trim_(ANGLE_TRIM_PARAM)
 , motor_scale_(SPEED_SCALE_PARAM)
 , motor_shift_(SPEED_SHIFT_PARAM)
+, motor_trim_(SPEED_TRIM_PARAM)
 
 {
   cout << "ApplicationLayer ===> I am a" 
@@ -56,6 +58,12 @@ ApplicationLevel::ApplicationLevel(AbstractionLayer*  abstract,
   }
   else
     cout << "Steering shift not found. Error: " << status << endl;
+  if(!(status = myconfig.GetDoubleFromConfigFile(ACE_TEXT("steering_angle"), ACE_TEXT("trim"), &coef)) ) {
+    cout << "Steering trim is: " << coef << endl;
+    steering_trim_ = coef;
+  }
+  else
+    cout << "Steering trim not found. Error: " << status << endl;
 
   if(!(status = myconfig.GetDoubleFromConfigFile(ACE_TEXT("motor_speed"), ACE_TEXT("scale"), &coef)) ) {
     cout << "Motor scale is: " << coef << endl;
@@ -69,6 +77,12 @@ ApplicationLevel::ApplicationLevel(AbstractionLayer*  abstract,
   }
   else
     cout << "Motor shift not found. Error: " << status << endl;
+  if(!(status = myconfig.GetDoubleFromConfigFile(ACE_TEXT("motor_speed"), ACE_TEXT("trim"), &coef)) ) {
+    cout << "Motor trim is: " << coef << endl;
+    motor_trim_ = coef;
+  }
+  else
+    cout << "Motor trim not found. Error: " << status << endl;
 
   cout << "ApplicationLevel launched by a publisher or a subscriber" << endl;
 }
@@ -94,7 +108,7 @@ void ApplicationLevel::receive_steering(const Actuators::Steering& steering)
    if (ignore_steering_)
      return;
    //cout << "ApplicationLevel ===> Steering angle : " << (int)steering.steering_angle
-   steering_angle = ((int)steering.steering_angle  * steering_scale_+ steering_shift_);
+   steering_angle = (steering.steering_angle + steering_trim_- 128)  * steering_scale_+ steering_shift_;
    cout << "ApplicationLevel ===> Steering angle : " << steering_angle
 	<< " Steering count : " << steering.steering_count
 	<< endl;
@@ -114,7 +128,7 @@ Actuators::Steering steering_ = {Actuators::STEERING_LEFT,0,99,0};
 void ApplicationLevel::send_vehicle_heading (const int& vehicle_heading)
 {
    //steering_.steering_angle = vehicle_heading - steering_shift_)/steering_scale_;
-   steering_.steering_angle = vehicle_heading;
+   steering_.steering_angle = vehicle_heading + 128;
    abstraction_layer_->send_steering(steering_);
    steering_.steering_count++;
 }
@@ -135,7 +149,7 @@ void ApplicationLevel::receive_motor(const Actuators::Motor& motor)
    if (ignore_motor_)
       return;
    //cout << "ApplicationLevel ===> Motor speed : " << (int)motor.motor_speed
-   motor_speed = ((int)motor.motor_speed * motor_scale_ + motor_shift_);
+   motor_speed = (motor.motor_speed + motor_trim_ - 128) * motor_scale_ + motor_shift_;
    cout << "ApplicationLevel ===> Motor speed : " << motor_speed
 	<< " Motor count : " << motor.motor_count
 	<< endl;
@@ -155,7 +169,7 @@ Actuators::Motor motor_ = {Actuators::MOTOR_FORWARD,0,98,0};
 void ApplicationLevel::send_vehicle_speed (const int& vehicle_speed)
 {
    //motor_.motor_speed = (vehicle_speed - motor_shift_)/motor_scale_;
-   motor_.motor_speed = vehicle_speed;
+   motor_.motor_speed = vehicle_speed + 128;
    abstraction_layer_->send_motor(motor_);
    motor_.motor_count++;
 }

@@ -1,10 +1,12 @@
 // Source from DistributedContent example adapted by J. Ehrlich
 #ifndef APPLICATIONLEVEL_H_
 #define APPLICATIONLEVEL_H_
-#define ANGLE_SCALE_PARAM 0.3333333333
-#define ANGLE_SHIFT_PARAM -50
-#define SPEED_SCALE_PARAM 0.1111111111
-#define SPEED_SHIFT_PARAM -16.66666666
+#define ANGLE_SCALE_PARAM 2
+#define ANGLE_SHIFT_PARAM 150
+#define ANGLE_TRIM_PARAM 0
+#define SPEED_SCALE_PARAM 2
+#define SPEED_SHIFT_PARAM 150
+#define SPEED_TRIM_PARAM 0
 
 #include "MotorC.h"
 #include <ace/String_Base.h>
@@ -122,7 +124,7 @@ private:
   // Ignore flags
   bool ignore_motor_, ignore_steering_;
   // Scaling coefficcient
-  double steering_scale_, steering_shift_, motor_scale_, motor_shift_;
+  double steering_scale_, steering_shift_, steering_trim_, motor_scale_, motor_shift_, motor_trim_;
   // Rpi Controller
   RpiCtrl* myrpi_;
 

@@ -10,7 +10,7 @@
 #define ERROR_NO_ITEM  (-3)
 
 typedef struct {
-   int duration;
+   float duration;
    float steering;
    float  motor;
 } TRIPLET; 
@@ -26,7 +26,7 @@ ScenarioReader();
 //parse scenario string
 int ScenarioParse(char *scenario);
 //get next decoded item
-int ScenarioGetItem(int *duration, float *steering, float * motor);
+int ScenarioGetItem(float *duration, float *steering, float * motor);
 
 private:
 

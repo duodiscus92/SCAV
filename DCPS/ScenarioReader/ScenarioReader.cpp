@@ -21,7 +21,7 @@ int ScenarioReader::ScenarioParse(char *ps)
    return status;
 }
 
-int ScenarioReader::ScenarioGetItem(int *duration, float *steering, float *motor)
+int ScenarioReader::ScenarioGetItem(float *duration, float *steering, float *motor)
 {
    if (next_item < items_found){
       *duration = tdata[next_item].duration;
@@ -46,7 +46,7 @@ int main(int argc, char *argv[])
    myreader.ScenarioParse(scenario);
 
    while(!myreader.ScenarioGetItem(&duration, &steering, &motor) ) {
-      printf("%d, %lf, %lf \n", duration, steering, motor);
+      printf("%lf, %lf, %lf \n", duration, steering, motor);
       sleep(1);
    }
 }

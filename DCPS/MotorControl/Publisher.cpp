@@ -1,5 +1,6 @@
 /* adapted from OpenDDS by J. Ehrlich */
 #include <string>
+#include <unistd.h>
 #include "ace/Get_Opt.h"
 #include "ace/OS_NS_unistd.h"
 #include "ace/OS_NS_stdlib.h"
@@ -82,11 +83,11 @@ int ACE_TMAIN (int argc, ACE_TCHAR *argv[])
       Config_Scav myconfig;
       myconfig.ImportConfigFile(ACE_TEXT("Config_MotorControl.ini"));
       myconfig.GetStringFromConfigFile(ACE_TEXT("scenarios"), ACE_TEXT("huit"), Scenario);
-      myconfig.GetIntFromConfigFile(ACE_TEXT("iteration"), ACE_TEXT("number"), &Iteration);
+      myconfig.GetIntFromConfigFile(ACE_TEXT("iteration"), ACE_TEXT("itnum"), &Iteration);
 
       //Publish the scenario
       ScenarioReader myreader;
-      int duration, cnt=1; float heading, speed;
+      int cnt=1, pentduration; useconds_t pdecduration; float duration, heading, speed;
       for(int i = 0; i < Iteration; i++){
       myreader.ScenarioParse(Scenario);
       while(!myreader.ScenarioGetItem(&duration, &heading, &speed) ) {
@@ -95,7 +96,10 @@ int ACE_TMAIN (int argc, ACE_TCHAR *argv[])
       	app_level.send_vehicle_speed((int)speed); 
 	cout << "Publishing Sample : " << cnt++ << " speed (dm/h) : " << (int)speed << " steering heading (°) : " << (int)heading << endl;
 	// wait a duration
-        ACE_OS::sleep(duration);
+        pentduration = duration; //take the integer part of duration
+	pdecduration = (duration - pentduration) * 1000000L; // take the decimal part of duration and convert in microsec
+        ACE_OS::sleep(pentduration);  //sleep X seconds
+        usleep(pdecduration); //sleep Y mucroseconds
       }
       }
  
