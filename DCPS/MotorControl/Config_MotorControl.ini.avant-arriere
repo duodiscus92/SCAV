@@ -5,11 +5,11 @@
 
 [motor_speed]
 	scale = 2
-	shift = 152
+	shift = 156
         trim = 0
 
 [iteration]
 	itnum = 5
 
 [scenarios]
-	huit = ":5,0,0:1,0,5:4,-20,5:0.8,0,5:0.8,0,5:5,20,5:1,0,5:1,0,0:"
+	huit = ":1,0,0:4,0,3:1,0,0:4,0,-6:1,0,0:"
